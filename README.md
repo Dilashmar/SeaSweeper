@@ -32,7 +32,7 @@ Our hack consists of two main components: a hardware prototype designed to clean
 
 To get started with SeaSweeper, follow these steps:
 
-1. Clone the repository: `git clone https://github.com/your-username/seasweeper.git`
+1. Clone the repository: `git clone https://github.com/Dilashmar/seasweeper.git`
 2. Install necessary dependencies.
 3. Set up the hardware prototype and connect it to the software platform.
 4. Run the application and start monitoring and cleaning water bodies.
