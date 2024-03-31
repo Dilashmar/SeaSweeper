@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<!--<title>Display a popup on click</title>-->
+<!--<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">-->
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.js"></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+.mapboxgl-popup {
+    max-width: 400px;
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+.geocoder {
+    position: absolute;
+    z-index: 100;
+    width: 50%;
+    left: 50%;
+    margin-left: -25%;
+    top: 9em;
+}
+.mapboxgl-ctrl-geocoder {
+    min-width: 100%;
+}
+#map {
+    margin-top: 9em;
+}
+</style>
+</head>
+<body>
+
+<div id="map"></div>
+<div id="geocoder" class="geocoder"></div>
+
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic2N5cHNvIiwiYSI6ImNsdWVkZmMycDE4eGcyamtpc3FnYTc4enYifQ.szbJTmLciez7y5EbiFxinA';
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/scypso/clueeco8002ed01nwe0k04xrv',
+        center: [-77.04, 38.907],
+        zoom: 11
+    });
+
+    map.addControl(new mapboxgl.GeolocateControl({
+        positionOptions: {
+            enableHighAccuracy: true
+        },
+        trackUserLocation: true,
+        showUserHeading: true
+    }));
+
+    const geocoder = new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl
+    });
+
+    document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
+
+    map.on('load', () => {
+        // Adding places
+        map.addSource('places', {
+            'type': 'geojson',
+            'data': {
+                'type': 'FeatureCollection',
+                'features': [
+                    {
+                        'type': 'Feature',
+                        'properties': {
+                            'description': '<h5>Anacostia SeaSweeper</h5><p><b>Location:</b> [-77.00433639, 38.86963139]<br><br><b>Temperature of Water:</b> 23.0°C<br><b>CO2 Levels in Water:</b> 310 ppm<br><b>Depth in the Water:</b> 2.1 meters<br><b>Trash Container Fullness:</b> 75%<br><b>Operating Duration:</b> 5 hours 15 minutes</b></p>'
+                        },
+                        'geometry': {
+                            'type': 'Point',
+                            'coordinates': [-77.00433639, 38.86963139]
+                        }
+                    },
+                    {
+                        'type': 'Feature',
+                        'properties': {
+                            'description': '<h5>Potomac SeaSweepe A</h5><p><b>Location:</b> [-77.05101863, 38.8826387]<br><br><b>Temperature of Water:</b> 21.8°C<br><b>CO2 Levels in Water:</b> 325 ppm<br><b>Depth in the Water:</b> 2.5 meters<br><b>Trash Container Fullness:</b> 50%<br><b>Operating Duration:</b> 3 hours 45 minutes</b></p>'
+                        },
+                        'geometry': {
+                            'type': 'Point',
+                            'coordinates': [-77.05101863, 38.8826387]
+                        }
+                    },
+                    {
+                        'type': 'Feature',
+                        'properties': {
+                            'description': '<h5>Potomac SeaSweeper B</h5><p><b>Location:</b>  [-77.0315267, 38.8633828]<br><br><b>Temperature of Water:</b> 22.5°C<br><b>CO2 Levels in Water:</b> 320 ppm<br><b>Depth in the Water:</b> 1.8 meters<br><b>Trash Container Fullness:</b> 65%<br><b>Operating Duration:</b> 4 hours 30 minutes</b></p>'
+                        },
+                        'geometry': {
+                            'type': 'Point',
+                            'coordinates': [-77.0315267, 38.8633828]
+                        }
+                    }
+                ]
+            }
+        });
+
+        map.addLayer({
+            'id': 'places',
+            'type': 'circle',
+            'source': 'places',
+            'paint': {
+                'circle-color': '#4264fb',
+                'circle-radius': 6,
+                'circle-stroke-width': 2,
+                'circle-stroke-color': '#ffffff'
+            }
+        });
+
+        // Adding centers
+        map.addSource('centers', {
+            'type': 'geojson',
+            'data': {
+                'type': 'FeatureCollection',
+                'features': [
+                    {
+                        'type': 'Feature',
+                        'properties': {
+                            'description': '<h5>Navy Yard Center</h5><p>Inactive SeaSweepers ready for use: 2</p><button style="background-color: #007bff; color: white; padding: 8px 12px; border: none; cursor: pointer; border-radius: 4px;">Make Report</button>'
+                        },
+                        'geometry': {
+                            'type': 'Point',
+                            'coordinates': [-76.99566177, 38.87332713]
+                        }
+                    },
+                    {
+                        'type': 'Feature',
+                        'properties': {
+                            'description': '<h5>Naval Support Facility (Anacostia)</h5><p>Inactive SeaSweepers ready for use: 1</p><button style="background-color: #007bff; color: white; padding: 8px 12px; border: none; cursor: pointer; border-radius: 4px;">Make Report</button>'
+                        },
+                        'geometry': {
+                            'type': 'Point',
+                            'coordinates': [-77.01292596, 38.85460189]
+                        }
+                    }
+                ]
+            }
+        });
+
+        map.addLayer({
+            'id': 'centers',
+            'type': 'circle',
+            'source': 'centers',
+            'paint': {
+                'circle-color': '#808080',
+                'circle-radius': 6,
+                'circle-stroke-width': 2,
+                'circle-stroke-color': '#ffffff'
+            }
+        });
+
+        // Popups on click for places
+        map.on('click', 'places', (e) => {
+            const coordinates = e.features[0].geometry.coordinates.slice();
+            const description = e.features[0].properties.description;
+
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
+
+            new mapboxgl.Popup()
+                .setLngLat(coordinates)
+                .setHTML(description)
+                .addTo(map);
+        });
+
+        // Popups on click for centers
+        map.on('click', 'centers', (e) => {
+            const coordinates = e.features[0].geometry.coordinates.slice();
+            const description = e.features[0].properties.description;
+
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
+
+            new mapboxgl.Popup()
+                .setLngLat(coordinates)
+                .setHTML(description)
+                .addTo(map);
+        });
+    });
+    
+    // Change cursor to pointer when mouse enters the 'places' layer features
+    map.on('mouseenter', 'places', () => {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+
+    // Reset cursor to default when mouse leaves the 'places' layer features
+    map.on('mouseleave', 'places', () => {
+        map.getCanvas().style.cursor = '';
+    });
+
+    // Change cursor to pointer when mouse enters the 'centers' layer features
+    map.on('mouseenter', 'centers', () => {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+
+    // Reset cursor to default when mouse leaves the 'centers' layer features
+    map.on('mouseleave', 'centers', () => {
+        map.getCanvas().style.cursor = '';
+	 });
+   
+</script>
+
+</body>
+</html>
